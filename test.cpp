@@ -16,7 +16,7 @@ int main() {
     viewer.initCameraParameters();
     viewer.setCameraPosition(0,0,-800,0,-1,0);
 
-if (pcl::io::loadPCDFile<pcl::PointXYZRGB> ("pcl/pcl10.pcd", *cloud) == -1) //* load the file
+if (pcl::io::loadPCDFile<pcl::PointXYZRGB> ("pcl10.pcd", *cloud) == -1) //* load the file
   {
     PCL_ERROR ("Couldn't read file test_pcd.pcd \n");
     return (-1);
