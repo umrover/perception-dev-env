@@ -21,29 +21,6 @@ then
 fi
 }
 
-retry_command(){
-if ! $command
-then 
-    for i in 1 2
-    do
-        echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!$command FAILED. Attempt $i. Please close all other applications"
-        
-        if $command
-        then
-            check='y' 
-            break
-        fi
-    
-    done
-
-    if ! [ $check == 'y' ]
-    then
-        echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!$command FAILED. Retrying. Attempt 3. Please close all other applications"
-        stop_if_fail
-    fi
-fi
-}
-
 install_cuda(){
 
 echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!INSTALLING CUDA"
@@ -82,6 +59,13 @@ echo "Workspace all set!"
 
 }
 
+install_meson() {
+    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Installing Meson"
+    apt-get install -y python3 python3-pip python3-setuptools python3-wheel ninja-build
+    pip3 install --user meson
+    echo "export PATH=\"\$PATH:~/.local/bin\"" >> ~/.bashrc
+    echo "Meson Installed. Reload Terminal to Finish"
+}
 
 question="Setup Workspace? (Y/N): "
 ask_question
@@ -98,19 +82,9 @@ question="OpenCV? (Y/N): ";
 ask_question
 openCV=$input
 
-question="CUDA? (Y/N): ";
+question="Meson? (Y/N) ";
 ask_question
-installCuda=$input
-
-if [ $installCuda == 'y' ] || [ $installCuda == 'Y' ] ;
-then
-    echo "You have indicated you wish to install CUDA" ; 
-    echo "Once CUDA is installed you must restart your computer" ;
-    echo "After restart select N for this option and Y for the CUDA Installed option to continue setting up rest of the dev evn" ;
-    question="Continue? (Y/N) ";
-    ask_question
-    install_cuda
-fi
+meson=$input
 
 question="CUDA Installed? (Y/N): ";
 ask_question
@@ -122,6 +96,20 @@ then
     question="ZedSDK? (Y/N): ";
     ask_question
     zedSDK=$input
+else
+    question="Install CUDA? (Y/N): ";
+    ask_question
+    installCuda=$input
+
+    if [ $installCuda == 'y' ] || [ $installCuda == 'Y' ] ;
+    then
+        echo "You have indicated you wish to install CUDA" ; 
+        echo "Once CUDA is installed you must restart your computer" ;
+        echo "After restart select N for this option and Y for the CUDA Installed option to continue setting up rest of the dev evn" ;
+        question="Continue? (Y/N) ";
+        ask_question
+        install_cuda
+    fi
 fi
 
 question="PCL? (Y/N): ";
@@ -133,6 +121,11 @@ then
 question="PCL GPU Configuration? (Y/N): ";
 ask_question
 PCL_GPU=$input
+fi
+
+if [ $meson == 'y' ] || [ $meson == 'Y' ] 
+then
+install_meson
 fi
 
 if [ $openCV == 'y' ] || [ $openCV == 'Y' ] 
