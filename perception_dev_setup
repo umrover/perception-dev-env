@@ -237,7 +237,7 @@ apt-get update -y
 wget -O ZED_SDK_Linux_Ubuntu18.run https://download.stereolabs.com/zedsdk/3.2/cu100/ubuntu18
 command="chmod +x ZED_SDK_Linux_Ubuntu18.run"
 stop_if_fail
-./ZED_SDK_Linux_Ubuntu18.run 
+./ZED_SDK_Linux_Ubuntu18.run silent
 rm ZED_SDK_Linux_Ubuntu18.run
 fi
 
