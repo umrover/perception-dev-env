@@ -92,7 +92,6 @@ CUDA=$input
 
 if [ $CUDA == 'y' ] || [ $CUDA == 'Y' ] ;
 then
-    echo "Note: to install ZedSDK, you must run this script WITHOUT sudo. Please launch without root privileges before continuing"
     question="ZedSDK? (Y/N): ";
     ask_question
     zedSDK=$input
@@ -232,6 +231,8 @@ command="chmod +x ZED_SDK_Linux_Ubuntu18.run"
 stop_if_fail
 ./ZED_SDK_Linux_Ubuntu18.run silent
 rm ZED_SDK_Linux_Ubuntu18.run
+cd /usr/local
+chmod a+xwr --preserve-root --recursive zed
 fi
 
 
