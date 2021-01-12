@@ -3,8 +3,6 @@ FROM nvidia/cuda:10.0-devel-ubuntu18.04
 MAINTAINER Justin Beemer <jubeemer@umich.edu>
 MAINTAINER Matt Martin <mmartin4972@gmail.com>
 
-
-
 #Setup Ansible
 ENV ANSIBLE_VERSION 2.9.4
 
@@ -73,6 +71,8 @@ RUN cd /opt && \
     -D BUILD_opencv_structured_light=OFF -D BUILD_opencv_surface_matching=OFF -D BUILD_opencv_text=OFF \
     -D BUILD_opencv_tracking=OFF -D BUILD_opencv_xfeatures2d=OFF -D BUILD_opencv_ximgproc=OFF \
     -D BUILD_opencv_xobjdetect=OFF -D BUILD_opencv_xphoto=OFF /opt/opencv-3.2.0/ && make -j4 && make install && ldconfig
+
+
 
 #Install PCL
 #Install VTK Successful
