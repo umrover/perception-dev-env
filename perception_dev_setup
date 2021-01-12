@@ -67,6 +67,25 @@ install_meson() {
     echo "Meson Installed. Reload Terminal to Finish"
 }
 
+install_go() {
+    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Installing GO"
+    wget https://golang.org/dl/go1.15.6.linux-amd64.tar.gz
+    tar -C /usr/local -xzf go1.15.6.linux-amd64.tar.gz
+    export PATH=$PATH:/usr/local/go/bin
+    go version
+}
+
+intall_singularity() {
+    export VERSION=3.7.0 && \
+    wget https://github.com/sylabs/singularity/releases/download/v${VERSION}/singularity-${VERSION}.tar.gz && \
+    tar -xzf singularity-${VERSION}.tar.gz && \
+    cd singularity
+    ./mconfig && \
+    make -C ./builddir && \
+    sudo make -C ./builddir install
+    . /usr/local/etc/bash_completion.d/singularity
+}
+
 question="Setup Workspace? (Y/N): "
 ask_question
 setupWorkspace=$input
@@ -77,14 +96,6 @@ read -p "Please enter path to mrover-workspace (doesn't include 'mrover-workspac
 setup_workspace
 exit
 fi
-
-question="OpenCV? (Y/N): ";
-ask_question
-openCV=$input
-
-question="Meson? (Y/N) ";
-ask_question
-meson=$input
 
 question="CUDA Installed? (Y/N): ";
 ask_question
@@ -122,14 +133,39 @@ ask_question
 PCL_GPU=$input
 fi
 
+question="OpenCV? (Y/N): ";
+ask_question
+openCV=$input
+
+question="Meson? (Y/N): ";
+ask_question
+meson=$input
+
+question="GO? (Y/N): ";
+ask_question
+go=$input
+
+question="Singularity? (Y/N): ";
+ask_question
+singularity=$input
+
 if [ $meson == 'y' ] || [ $meson == 'Y' ] 
 then
 install_meson
 fi
 
+if [ $go == 'y' ] || [ $go == 'Y' ]
+then 
+install_go
+fi
+
+if [$singularity == 'y' ] || [ $singularity == 'Y' ]
+then 
+install_singularity
+fi
+
 if [ $openCV == 'y' ] || [ $openCV == 'Y' ] 
 then
-
 echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!INSTALLING OPENCV"
 apt-get update
 apt-get -y upgrade
@@ -198,7 +234,7 @@ curl https://codeload.github.com/PointCloudLibrary/pcl/tar.gz/pcl-1.11.1 --outpu
 tar -xvzf pcl-pcl-1.11.1.tar.gz 
 rm pcl-pcl-1.11.1.tar.gz
 cd pcl-pcl-1.11.1
-sudo mkdir build && cd build
+mkdir build && cd build
 
 if [ $PCL_GPU == 'y' ] || [ $PCL_GPU == 'Y' ] ;
 then 
