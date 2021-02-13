@@ -86,6 +86,19 @@ intall_singularity() {
     . /usr/local/etc/bash_completion.d/singularity
 }
 
+install_python() {
+    apt-get install -y wget build-essential checkinstall
+    apt-get install -y ylibreadline-gplv2-dev libncursesw5-dev libssl-dev \
+    libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libffi-dev zlib1g-dev
+    cd /usr/local
+    wget https://www.python.org/ftp/python/3.7.9/Python-3.7.9.tgz
+    tar xzf Python-3.7.9.tgz
+    cd Python-3.7.9
+    ./configure --enable-optimizations
+    make altinstall
+    python3.7 -V
+}
+
 question="Setup Workspace? (Y/N): "
 ask_question
 setupWorkspace=$input
@@ -149,6 +162,10 @@ question="Singularity? (Y/N): ";
 ask_question
 singularity=$input
 
+question="Python 3.7? (Y/N): ";
+ask_question
+python=$input
+
 if [ $meson == 'y' ] || [ $meson == 'Y' ] 
 then
 install_meson
@@ -159,9 +176,14 @@ then
 install_go
 fi
 
-if [$singularity == 'y' ] || [ $singularity == 'Y' ]
+if [ $singularity == 'y' ] || [ $singularity == 'Y' ]
 then 
 install_singularity
+fi
+
+if [ $python == 'y' ] || [ $python == 'Y' ]
+then 
+install_python
 fi
 
 if [ $openCV == 'y' ] || [ $openCV == 'Y' ] 
